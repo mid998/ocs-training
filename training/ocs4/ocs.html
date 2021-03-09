@@ -2578,7 +2578,7 @@ section of this lab guide.</p>
 <div class="paragraph">
 <p>In this section, you will deploy a new OCP application that uses Object Bucket Claims to
  create dynamic buckets via the Multicloud Object Gateway.
-The MCG console is not fully integrated Openshift Web Console and resources created in the MCG console
+The MCG console is not fully integrated with the <strong>Openshift Web Console</strong> and resources created in the MCG console
  are not synchronized back to the Openshift Cluster. For checking MCG/NooBaa status and object bucket claims, the <code>NooBaa client</code> or <code>oc CLI</code> will be used.</p>
 </div>
 <div class="paragraph">
@@ -2750,7 +2750,25 @@ cd photo-album
 <p>Deployment might take a few minutes to complete.</p>
 </div>
 <div class="paragraph">
-<p>The photo-album application has created an object bucket claim. The new bucket, Configmap and Secret can be viewed using the oc cli.</p>
+<p>Check the photo-album deployment is complete by running:</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc -n demo get pods</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example output:</div>
+<div class="content">
+<pre>oc -n demo get pods
+NAME                   READY   STATUS      RESTARTS   AGE
+photo-album-1-build    0/1     Completed   0          10m
+photo-album-1-deploy   0/1     Completed   0          10m
+photo-album-1-rtplt    1/1     Running     0          10m</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now that the photo-album application has deployed you can view the Object Bucket Claim it created. You can also view the new bucket, Configmap and Secret using the oc cli.</p>
 </div>
 <div class="listingblock execute">
 <div class="content">
