@@ -2738,16 +2738,75 @@ connect to the new bucket from within your deployment.</p>
 <div class="paragraph">
 <p>To demonstrate this feature we will use the Photo-Album demo application.</p>
 </div>
+<div class="paragraph">
+<p>First download and extract the photo-album tarball.</p>
+</div>
 <div class="listingblock execute">
-<div class="title">Download the photo-album and create the application:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -s https://raw.githubusercontent.com/red-hat-storage/ocs-training/master/training/modules/ocs4/attachments/photo-album.tar.gz | tar xvz - .
-cd photo-album
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -s https://raw.githubusercontent.com/mid998/ocs-training/master/training/modules/ocs4/attachments/photo-album.tar.gz | tar xvz</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example output:</div>
+<div class="content">
+<pre>curl -s https://raw.githubusercontent.com/mid998/ocs-training/master/training/modules/ocs4/attachments/photo-album.tar.gz | tar xvz
+x photo-album/
+x photo-album/documentation/
+x photo-album/app/
+x photo-album/images/
+x photo-album/demo.sh
+[...]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, run the application startup script which will build and deploy the app to your cluster. Please make sure you follow the continuation prompts.</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd photo-album
 ./demo.sh</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Deployment might take a few minutes to complete.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example output:</div>
+<div class="content">
+<pre>./demo.sh
+[ OK    ] Using apps.cluster-7c31.7c31.sandbox905.opentlc.com as our base domain
+
+Object Bucket Demo
+
+ * Cleanup existing environment
+
+Press any key to continue...
+[ OK    ] oc delete --ignore-not-found=1 -f app.yaml
+
+[ OK    ] oc delete --ignore-not-found=1 bc photo-album -n demo
+buildconfig.build.openshift.io "photo-album" deleted
+
+ * Import dependencies and create build config
+-./demo.sh
+[ OK    ] Using apps.cluster-7c31.7c31.sandbox905.opentlc.com as our base domain
+
+Object Bucket Demo
+
+ * Cleanup existing environment
+
+Press any key to continue...
+[ OK    ] oc delete --ignore-not-found=1 -f app.yaml
+
+[ OK    ] oc delete --ignore-not-found=1 bc photo-album -n demo
+buildconfig.build.openshift.io "photo-album" deleted
+
+ * Import dependencies and create build config
+
+[...]
+ OK    ] oc start-build photo-album --from-dir . -F -n demo
+photo-album setup
+/opt/app-root/src/demo-apps/photo-album</pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Check the photo-album deployment is complete by running:</p>
@@ -2760,8 +2819,7 @@ cd photo-album
 <div class="listingblock">
 <div class="title">Example output:</div>
 <div class="content">
-<pre>oc -n demo get pods
-NAME                   READY   STATUS      RESTARTS   AGE
+<pre>NAME                   READY   STATUS      RESTARTS   AGE
 photo-album-1-build    0/1     Completed   0          10m
 photo-album-1-deploy   0/1     Completed   0          10m
 photo-album-1-rtplt    1/1     Running     0          10m</pre>
@@ -2770,51 +2828,88 @@ photo-album-1-rtplt    1/1     Running     0          10m</pre>
 <div class="paragraph">
 <p>Now that the photo-album application has deployed you can view the Object Bucket Claim it created. You can also view the new bucket, Configmap and Secret using the oc cli.</p>
 </div>
+<div class="paragraph">
+<p>To view the Object Bucket Claim used by photo-album run the following:</p>
+</div>
 <div class="listingblock execute">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc -n demo get obc
-oc get ob
-oc -n demo get cm/photo-album -o yaml
-oc -n demo get secret/photo-album -o yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc -n demo get obc</code></pre>
 </div>
 </div>
 <div class="listingblock execute">
 <div class="title">Example output:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc -n demo get obc
-NAME          STORAGE-CLASS                 PHASE   AGE
-photo-album   openshift-storage.noobaa.io   Bound   155m
-
-oc get ob
-NAME                   STORAGE-CLASS                 CLAIM-NAMESPACE   CLAIM-NAME    RECLAIM-POLICY   PHASE   AGE
-obc-demo-photo-album   openshift-storage.noobaa.io   demo              photo-album   Delete Bound   155m
-
-oc get cm/photo-album -o yaml
-apiVersion: v1
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">NAME          STORAGE-CLASS                 PHASE   AGE
+photo-album   openshift-storage.noobaa.io   Bound   23m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To view the Object Bucket that was created by the object bucket claim above, run the following:</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get ob</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example output:</div>
+<div class="content">
+<pre>NAME                   STORAGE-CLASS                 CLAIM-NAMESPACE   CLAIM-NAME    RECLAIM-POLICY   PHASE   AGE
+obc-demo-photo-album   openshift-storage.noobaa.io   demo              photo-album   Delete           Bound   23m</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To view the ConfigMap created by the OBC, run the following:</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc -n demo get cm/photo-album -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The ConfigMap will contain important information such as the bucket name, service and port. All are used to configure the connection from within the deployment to the s3 endpoint.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example output:</div>
+<div class="content">
+<pre>apiVersion: v1
 data:
   BUCKET_HOST: s3.openshift-storage.svc
-  BUCKET_NAME: photo-album-645e537a-32ff-491b-9f93-d6aeef7a4ee8
+  BUCKET_NAME: photo-album-2c0d8504-ae02-4632-af83-b8b458b9b923
   BUCKET_PORT: "443"
   BUCKET_REGION: ""
   BUCKET_SUBREGION: ""
 kind: ConfigMap
-...
-
-oc get secret/photo-album -o yaml
-apiVersion: v1
+[...]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To view the Secret created by the OBC, run the following:</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc -n demo get secret/photo-album -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Secret will contain the credentials required for the application to connect and access the new object bucket.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example output:</div>
+<div class="content">
+<pre>apiVersion: v1
 data:
   AWS_ACCESS_KEY_ID: MTAyc3pJNnBsM3dXV0hOUzUyTEk=
   AWS_SECRET_ACCESS_KEY: cWpyWWhuendDcjNaR1ZyVkZVN1p4c2hRK2xicy9XVW1ETk50QmJpWg==
 kind: Secret
-...</code></pre>
+[...]</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>As you can see, the secret gives us the S3 access credentials, while the CM
-contains the S3 endpoint information for our photo-album application.</p>
+<p>As you can see when the new OBC is processed, MCG creates a new bucket, Secret and Configmap which contain all the information required for our application to use the new bucket.</p>
 </div>
 <div class="paragraph">
-<p>Object bucket claim details are at the top of photo-album/app.yaml.</p>
+<p>In order to view the details of the Object Bucket Claim, view the top of photo-album/app.yaml.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2872,152 +2967,6 @@ photo-album   photo-album.apps.cluster-7c31.7c31.sandbox905.opentlc.com         
 <div class="content">
 <img src="_images/photo-album-objects.png" alt="photo album objects">
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_using_an_obc_inside_a_container"><a class="anchor" href="#_using_an_obc_inside_a_container"></a>7.3. Using an OBC inside a container</h3>
-<div class="paragraph">
-<p>In this section we will see how one can create an <strong>OBC</strong> using a YAML file and
-use the provided S3 configuration in an example application.</p>
-</div>
-<div class="paragraph">
-<p>To deploy the <strong>OBC</strong> and the example application we apply this YAML file:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
-kind: Namespace
-metadata:
-  name: obc-test
----
-apiVersion: objectbucket.io/v1alpha1
-kind: ObjectBucketClaim
-metadata:
-  name: obc-test
-  namespace: obc-test
-spec:
-  generateBucketName: "obc-test-noobaa"
-  storageClassName: openshift-storage.noobaa.io
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: obc-test
-  namespace: obc-test
-  labels:
-    app: obc-test
-spec:
-  template:
-    metadata:
-      labels:
-        app: obc-test
-    spec:
-      restartPolicy: OnFailure
-      containers:
-        - image: mesosphere/aws-cli:latest
-          command: ["sh"]
-          args:
-            - '-c'
-            - 'set -x &amp;&amp; s3cmd --no-check-certificate --signature-v2 --host $BUCKET_HOST:$BUCKET_PORT --host-bucket $BUCKET_HOST:$BUCKET_PORT du'
-          name: obc-test
-          env:
-            - name: BUCKET_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: obc-test
-                  key: BUCKET_NAME
-            - name: BUCKET_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: obc-test
-                  key: BUCKET_HOST
-            - name: BUCKET_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: obc-test
-                  key: BUCKET_PORT
-            - name: AWS_DEFAULT_REGION
-              valueFrom:
-                configMapKeyRef:
-                  name: obc-test
-                  key: BUCKET_REGION
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: obc-test
-                  key: AWS_ACCESS_KEY_ID
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: obc-test
-                  key: AWS_SECRET_ACCESS_KEY</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The first part creates an <strong>OBC</strong> that will create a <strong>ConfigMap</strong> and a <strong>Secret</strong>
-that have the same name as the <strong>OBC</strong> (<code>obc-test</code>). The second part of the file
-(after the <code>---</code>), creates a Job that deploys a container with the s3cmd
-pre-installed. It will execute s3cmd with the appropriate command line
-arguments and exit. S3cmd will in this case report the current disk usage of
-our S3 endpoint and exit, which will mark our <strong>Pod</strong> as <code>Completed</code>.</p>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s try this out:</p>
-</div>
-<div class="listingblock execute">
-<div class="title">Deploy the Manifest:</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -s https://raw.githubusercontent.com/red-hat-storage/ocs-training/master/training/modules/ocs4/attachments/obc_app_example.yaml | oc apply -f -</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example output:</div>
-<div class="content">
-<pre>namespace/obc-test created
-objectbucketclaim.objectbucket.io/obc-test created
-job.batch/obc-test created</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Afterwards watch the <strong>Pod</strong> be Created, Run and finally be marked <code>Completed</code>
-like below - be aware that your Pod name will differ:</p>
-</div>
-<div class="listingblock execute">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get pods -n obc-test -l app=obc-test</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example output:</div>
-<div class="content">
-<pre>NAME             READY   STATUS      RESTARTS   AGE
-obc-test-bvg8h   0/1     Completed   0          22s</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then you can check the <code>obc-test</code> <strong>Pod</strong> logs for the contents of the S3 bucket
-using the command below (in this case there are zero objects in the bucket).</p>
-</div>
-<div class="listingblock execute">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc logs -n obc-test $(oc get pods -n obc-test -l app=obc-test -o jsonpath='{.items[0].metadata.name}')</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example output:</div>
-<div class="content">
-<pre>+ s3cmd --no-check-certificate --signature-v2 --host s3.openshift-storage.svc:443 --host-bucket s3.openshift-storage.svc:443 du
-0        0 objects s3://obc-test-noobaa-1ec979bc-c53f-42e0-b551-ffaa895c06a6/
---------
-0        Total</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This proves that the access credentials from the OBC work and are set up
-correctly inside of the container. Most applications support reading out the
-<code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code> environment variables
-natively, but you will have to figure out how to set the host and bucket name
-for each application. In our example we used CLI flags of s3cmd for this.</p>
 </div>
 </div>
 </div>
