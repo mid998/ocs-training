@@ -2784,8 +2784,7 @@ Please make sure you follow the continuation prompts.
 <div class="listingblock">
 <div class="title">Example output:</div>
 <div class="content">
-<pre>./demo.sh
-[ OK    ] Using apps.cluster-7c31.7c31.sandbox905.opentlc.com as our base domain
+<pre>[ OK    ] Using apps.cluster-7c31.7c31.sandbox905.opentlc.com as our base domain
 
 Object Bucket Demo
 
@@ -2837,10 +2836,10 @@ photo-album-1-rtplt    1/1     Running     0          10m</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now that the photo-album application has deployed you can view the Object Bucket Claim it created. You can also view the new bucket, Configmap and Secret using the oc cli.</p>
+<p>Now that the photo-album application has deployed you can view the <strong>Object Bucket Claim</strong> it created. You can also view the new bucket, <strong>Configmap</strong> and <strong>Secret</strong> using the oc command.</p>
 </div>
 <div class="paragraph">
-<p>To view the Object Bucket Claim used by photo-album run the following:</p>
+<p>To view the <strong>Object Bucket Claim</strong> used by photo-album run the following:</p>
 </div>
 <div class="listingblock execute">
 <div class="content">
@@ -2855,7 +2854,7 @@ photo-album   openshift-storage.noobaa.io   Bound   23m</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To view the Object Bucket that was created by the object bucket claim above, run the following:</p>
+<p>To view the <strong>Object Bucket</strong> that was created by the object bucket claim above, run the following:</p>
 </div>
 <div class="listingblock execute">
 <div class="content">
@@ -2870,6 +2869,9 @@ obc-demo-photo-album   openshift-storage.noobaa.io   demo              photo-alb
 </div>
 </div>
 <div class="paragraph">
+<p>The ConfigMap will contain important information such as the bucket name, service and port. All are used to configure the connection from within the deployment to the s3 endpoint.</p>
+</div>
+<div class="paragraph">
 <p>To view the ConfigMap created by the OBC, run the following:</p>
 </div>
 <div class="listingblock execute">
@@ -2877,13 +2879,10 @@ obc-demo-photo-album   openshift-storage.noobaa.io   demo              photo-alb
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc -n demo get cm/photo-album -o yaml</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>The ConfigMap will contain important information such as the bucket name, service and port. All are used to configure the connection from within the deployment to the s3 endpoint.</p>
-</div>
 <div class="listingblock">
 <div class="title">Example output:</div>
 <div class="content">
-<pre>apiVersion: v1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
 data:
   BUCKET_HOST: s3.openshift-storage.svc
   BUCKET_NAME: photo-album-2c0d8504-ae02-4632-af83-b8b458b9b923
@@ -2891,8 +2890,11 @@ data:
   BUCKET_REGION: ""
   BUCKET_SUBREGION: ""
 kind: ConfigMap
-[...]</pre>
+[...]</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The Secret will contain the credentials required for the application to connect and access the new object bucket.</p>
 </div>
 <div class="paragraph">
 <p>To view the Secret created by the OBC, run the following:</p>
@@ -2902,18 +2904,15 @@ kind: ConfigMap
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc -n demo get secret/photo-album -o yaml</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>The Secret will contain the credentials required for the application to connect and access the new object bucket.</p>
-</div>
 <div class="listingblock">
 <div class="title">Example output:</div>
 <div class="content">
-<pre>apiVersion: v1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
 data:
   AWS_ACCESS_KEY_ID: MTAyc3pJNnBsM3dXV0hOUzUyTEk=
   AWS_SECRET_ACCESS_KEY: cWpyWWhuendDcjNaR1ZyVkZVN1p4c2hRK2xicy9XVW1ETk50QmJpWg==
 kind: Secret
-[...]</pre>
+[...]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2938,49 +2937,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>In order to see objects in your new bucket, first upload some images to your photo-album by finding the route.</p>
-</div>
-<div class="listingblock execute">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc -n demo get route</code></pre>
-</div>
-</div>
-<div class="listingblock execute">
-<div class="title">Example output:</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get route
-NAME          HOST/PORT                                                   PATH   SERVICES
-    PORT     TERMINATION   WILDCARD
-photo-album   photo-album.apps.cluster-7c31.7c31.sandbox905.opentlc.com          photo-album   80-tcp                 None</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then navigate to the MCG console by viewing the Object Service Dashboard mentioned in Section 2.3, and selecting
- the Multcloud Object Gateway link under System Name:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/System-Name-MCG-Console.png" alt="System Name MCG Console">
-</div>
-</div>
-<div class="paragraph">
-<p>Once you have logged into the MCG console, you maybe view the bucket details by selecting the bucket from the Bucket menu:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/photo-album-buckets.png" alt="photo album buckets">
-</div>
-</div>
-<div class="paragraph">
-<p>Once in the bucket, select the object tab:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/photo-album-objects.png" alt="photo album objects">
-</div>
-</div>
-<div class="paragraph">
-<p>To view exactly how the application uses the information in the new Secret and ConfigMap have a look at the file photo-album/app.yaml after you have deployed the app. In the deployment template specification section, find 'env:' and you can see how the ConfigMap and Secret details are mapped to environment variables.</p>
+<p>To view exactly how the application uses the information in the new <strong>Secret</strong> and <strong>ConfigMap</strong> have a look at the file photo-album/app.yaml after you have deployed the app. In the deployment template specification section, find 'env:' and you can see how the <strong>ConfigMap</strong> and <strong>Secret</strong> details are mapped to environment variables.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3008,6 +2965,60 @@ photo-album   photo-album.apps.cluster-7c31.7c31.sandbox905.opentlc.com         
                   name: photo-album
                   key: AWS_SECRET_ACCESS_KEY
 [...]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In order to see objects in your new bucket, find your route:</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get route photo-album -n demo -o jsonpath --template="http://{.spec.host}{'\n'}"</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example output:</div>
+<div class="content">
+<pre>http://photo-album.apps.cluster-7c31.7c31.sandbox905.opentlc.com</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Copy and paste this route into a browser tab.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/photo-album-select-upload.png" alt="photo album select upload">
+</div>
+</div>
+<div class="paragraph">
+<p>Select 1 or more photos, then make sure to upload.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/photo-album-images.png" alt="photo album images">
+</div>
+</div>
+<div class="paragraph">
+<p>Then navigate to the MCG console by viewing the <strong>Object Service Dashboard</strong> mentioned previously, and selecting the Multcloud Object Gateway link under System Name:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/System-Name-MCG-Console.png" alt="System Name MCG Console">
+</div>
+</div>
+<div class="paragraph">
+<p>Login to the MCG Console using your Openshift Kubeadmin credentials. You can navigate to the bucket details by selecting the bucket from the Bucket menu:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/photo-album-buckets.png" alt="photo album buckets">
+</div>
+</div>
+<div class="paragraph">
+<p>Once in the bucket, select the object tab:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/photo-album-objects.png" alt="photo album objects">
 </div>
 </div>
 </div>
