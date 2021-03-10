@@ -2743,17 +2743,16 @@ connect to the new bucket from within your deployment.</p>
 </div>
 <div class="listingblock execute">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -s https://github.com/red-hat-storage/demo-apps/raw/main/packaged/photo-album.tgz | tar xvz</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -L -s https://github.com/red-hat-storage/demo-apps/blob/main/packaged/photo-album.tgz?raw=true | tar xvz</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Example output:</div>
 <div class="content">
-<pre>x photo-album/
-x photo-album/documentation/
-x photo-album/app/
-x photo-album/images/
-x photo-album/demo.sh
+<pre>photo-album/
+photo-album/documentation/
+photo-album/app/
+photo-album/demo.sh
 [...]</pre>
 </div>
 </div>
@@ -2773,7 +2772,7 @@ x photo-album/demo.sh
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Please make sure you follow the continuation prompts.
+Please make sure you follow the continuation prompts by pressing enter.
 </td>
 </tr>
 </table>
@@ -2846,15 +2845,15 @@ photo-album-1-rtplt    1/1     Running     0          10m</pre>
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc -n demo get obc</code></pre>
 </div>
 </div>
-<div class="listingblock execute">
+<div class="listingblock">
 <div class="title">Example output:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">NAME          STORAGE-CLASS                 PHASE   AGE
-photo-album   openshift-storage.noobaa.io   Bound   23m</code></pre>
+<pre>NAME          STORAGE-CLASS                 PHASE   AGE
+photo-album   openshift-storage.noobaa.io   Bound   23m</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To view the <strong>Object Bucket</strong> that was created by the object bucket claim above, run the following:</p>
+<p>To view the <strong>Object Bucket</strong> that was created by the <strong>Object Bucket Claim</strong> above, run the following:</p>
 </div>
 <div class="listingblock execute">
 <div class="content">
