@@ -2441,8 +2441,8 @@ either of these will cause you to lose your metrics and alerting data.</p>
 <div class="paragraph">
 <p>For Prometheus every supported configuration change is controlled through a
 central <strong>ConfigMap</strong>, which needs to exist before we can make changes. When you
-start off with a clean installation of Openshift, the ConfigMap to configure
-the Prometheus environment may not be present. To check if your ConfigMap is
+start off with a clean installation of Openshift, the <strong>ConfigMap</strong> to configure
+the Prometheus environment may not be present. To check if your <strong>ConfigMap</strong> is
 present, execute this:</p>
 </div>
 <div class="listingblock execute">
@@ -2451,13 +2451,13 @@ present, execute this:</p>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Output if the ConfigMap is not yet created:</div>
+<div class="title">Output if the <strong>ConfigMap</strong> is not yet created:</div>
 <div class="content">
 <pre>Error from server (NotFound): configmaps "cluster-monitoring-config" not found</pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Output if the ConfigMap is created:</div>
+<div class="title">Output if the <strong>ConfigMap</strong> is created:</div>
 <div class="content">
 <pre>NAME                        DATA   AGE
 cluster-monitoring-config   1      116m</pre>
@@ -2499,7 +2499,7 @@ smaller depending on requirements.
 </div>
 </div>
 <div class="listingblock">
-<div class="title">ConfigMap sample output:</div>
+<div class="title"><strong>ConfigMap</strong> sample output:</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">[...]
       volumeClaimTemplate:
@@ -2868,10 +2868,10 @@ obc-demo-photo-album   openshift-storage.noobaa.io   demo              photo-alb
 </div>
 </div>
 <div class="paragraph">
-<p>The ConfigMap will contain important information such as the bucket name, service and port. All are used to configure the connection from within the deployment to the s3 endpoint.</p>
+<p>The <strong>ConfigMap</strong> will contain important information such as the bucket name, service and port. All are used to configure the connection from within the deployment to the s3 endpoint.</p>
 </div>
 <div class="paragraph">
-<p>To view the ConfigMap created by the OBC, run the following:</p>
+<p>To view the <strong>ConfigMap</strong> created by the OBC, run the following:</p>
 </div>
 <div class="listingblock execute">
 <div class="content">
@@ -2893,10 +2893,10 @@ kind: ConfigMap
 </div>
 </div>
 <div class="paragraph">
-<p>The Secret will contain the credentials required for the application to connect and access the new object bucket.</p>
+<p>The <strong>Secret</strong> will contain the credentials required for the application to connect and access the new object bucket.</p>
 </div>
 <div class="paragraph">
-<p>To view the Secret created by the OBC, run the following:</p>
+<p>To view the <strong>Secret</strong> created by the OBC, run the following:</p>
 </div>
 <div class="listingblock execute">
 <div class="content">
@@ -2915,7 +2915,7 @@ kind: Secret
 </div>
 </div>
 <div class="paragraph">
-<p>As you can see when the new OBC is processed, MCG creates a new bucket, Secret and Configmap which contain all the information required for our application to use the new bucket.</p>
+<p>As you can see when the new OBC is processed, MCG creates a new bucket, <strong>Secret</strong> and <strong>ConfigMap</strong> which contain all the information required for our application to use the new bucket.</p>
 </div>
 <div class="paragraph">
 <p>In order to view the details of the Object Bucket Claim, view the top of photo-album/app.yaml.</p>
